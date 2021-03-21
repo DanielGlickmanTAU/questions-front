@@ -55,7 +55,7 @@
     		current_q = q_element.innerHTML
     		q_element.innerHTML = questions[i]
         t_element.innerHTML = texts[i]
-        i = i +1
+        i = (i +1)%texts.length
         callAPI(current_q,answer)
     }
 
