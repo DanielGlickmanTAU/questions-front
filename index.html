@@ -135,6 +135,8 @@
     }
 
     function startTimer(time_label, time_path) {
+      timePassed = 0;
+      timeLeft = TIME_LIMIT;
       timerInterval = setInterval(() => {
         timePassed = timePassed += 1;
         timeLeft = TIME_LIMIT - timePassed;
