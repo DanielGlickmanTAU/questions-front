@@ -6,14 +6,14 @@
   <!-- Add some CSS to change client UI -->
   <style>
     body {
-      background-color: #232F3E;
+      /* background-color: #232F3E; */
     }
 
     label, button {
-      color: #FF9900;
+      /* color: #FF9900; */
       font-family: Arial, Helvetica, sans-serif;
       font-size: 20px;
-      margin-left: 40px;
+      /* margin-left: 40px; */
     }
 
     input {
@@ -46,18 +46,35 @@
         .then(result => alert(JSON.parse(result).body))
         .catch(error => console.log('error', error));
     }
+    var questions = [ "can you go into a liquor store under 21 in nj",'is there a sequel to the whole nine yards']
+    var texts = ["There is no state law prohibiting consumption of alcohol by minors while on private property, but many municipalities prohibit underage consumption unless parents or adult relatives are present. Public schools are not permitted to have ``24/7'' conduct policies which sanction students for alcohol consumption outside of school. Minors are allowed to enter licensed establishments, and while state law does not prohibit bars and nightclubs from having events such as ``teen nights,'' or ``18 to party, 21 to drink,'' some municipalities impose restrictions. It is legal for a person under 21 to be in a location where underage drinking is occurring, and New Jersey does not have an ``internal possession'' statute criminalizing underage drinking after the fact.","The Whole Ten Yards is a 2004 American crime comedy film directed by Howard Deutch and sequel to the 2000 film The Whole Nine Yards. It was based on characters created by Mitchell Kapner, who was the writer of the first film. The film stars Bruce Willis, Matthew Perry, Amanda Peet, Natasha Henstridge, and Kevin Pollak. It was released on April 7, 2004 in North America. Unlike the first film, which was a commercial success despite receiving mixed reviews, The Whole Ten Yards was a major critical and commercial failure."]
+    i = 0
+    q = 'how is the wather'
+
+    var change_element = (q_element,t_element,answer) => {
+    		current_q = q_element.innerHTML
+    		q_element.innerHTML = questions[i]
+        t_element.innerHTML = texts[i]
+        i = i +1
+        callAPI(current_q,answer)
+    }
+
   </script>
+
 </head>
 <body>
-<form>
-  <label>First Name :</label>
-  <input type="text" id="fName">
-  <label>Last Name :</label>
-  <input type="text" id="lName">
-  <!-- set button onClick method to call function we defined passing input values as parameters -->
+<b >Question:</b>
+<span id="quest">is molly's game based on a book</span>
+<br>
+<b>Text:</b>
+<span id="text">Molly's Game is a 2017 American crime drama film written and directed by Aaron Sorkin (in his directorial debut), based on the memoir of the same name by Molly Bloom. It stars Jessica Chastain, Idris Elba, Kevin Costner, Michael Cera, Brian d'Arcy James, Chris O'Dowd, Bill Camp, Graham Greene, Claire Rankin, Joe Keery, and Jeremy Strong. The film follows Bloom (Chastain), who becomes the target of an FBI investigation of the underground poker empire she runs for Hollywood celebrities, athletes, business tycoons, and the Russian mob.</span>
+<br>
   <button type="button"
-          onclick="callAPI(document.getElementById('fName').value,document.getElementById('lName').value)">Call API
+          onclick="change_element(document.getElementById('quest'),document.getElementById('text'),1)">True
   </button>
-</form>
+  <button type="button"
+          onclick="change_element(document.getElementById('quest'),document.getElementById('text'),0)">False
+  </button>
+
 </body>
 </html>
