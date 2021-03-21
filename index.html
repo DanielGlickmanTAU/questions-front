@@ -104,29 +104,29 @@
     let timerInterval = null;
     let remainingPathColor = COLOR_CODES.info.color;
 
-    document.getElementById("app").innerHTML = `
-<div class="base-timer">
-  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <g class="base-timer__circle">
-      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
-      <path
-        id="base-timer-path-remaining"
-        stroke-dasharray="283"
-        class="base-timer__path-remaining ${remainingPathColor}"
-        d="
-          M 50, 50
-          m -45, 0
-          a 45,45 0 1,0 90,0
-          a 45,45 0 1,0 -90,0
-        "
-      ></path>
-    </g>
-  </svg>
-  <span id="base-timer-label" class="base-timer__label">${formatTime(
-      timeLeft
-    )}</span>
-</div>
-`;
+    //     document.getElementById("app").innerHTML = `
+    // <div class="base-timer">
+    //   <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    //     <g class="base-timer__circle">
+    //       <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+    //       <path
+    //         id="base-timer-path-remaining"
+    //         stroke-dasharray="283"
+    //         class="base-timer__path-remaining ${remainingPathColor}"
+    //         d="
+    //           M 50, 50
+    //           m -45, 0
+    //           a 45,45 0 1,0 90,0
+    //           a 45,45 0 1,0 -90,0
+    //         "
+    //       ></path>
+    //     </g>
+    //   </svg>
+    //   <span id="base-timer-label" class="base-timer__label">${formatTime(
+    //       timeLeft
+    //     )}</span>
+    // </div>
+    // `;
 
     startTimer();
 
@@ -134,15 +134,15 @@
       clearInterval(timerInterval);
     }
 
-    function startTimer() {
+    function startTimer(time_label, time_path) {
       timerInterval = setInterval(() => {
         timePassed = timePassed += 1;
         timeLeft = TIME_LIMIT - timePassed;
-        document.getElementById("base-timer-label").innerHTML = formatTime(
+        time_label.innerHTML = formatTime(
           timeLeft
         );
-        setCircleDasharray();
-        setRemainingPathColor(timeLeft);
+        setCircleDasharray(time_path);
+        setRemainingPathColor(timeLeft, time_path);
 
         if (timeLeft === 0) {
           onTimesUp();
@@ -161,21 +161,17 @@
       return `${minutes}:${seconds}`;
     }
 
-    function setRemainingPathColor(timeLeft) {
+    function setRemainingPathColor(timeLeft, time_path) {
       const {alert, warning, info} = COLOR_CODES;
       if (timeLeft <= alert.threshold) {
-        document
-          .getElementById("base-timer-path-remaining")
+        time_path
           .classList.remove(warning.color);
-        document
-          .getElementById("base-timer-path-remaining")
+        time_path
           .classList.add(alert.color);
       } else if (timeLeft <= warning.threshold) {
-        document
-          .getElementById("base-timer-path-remaining")
+        time_path
           .classList.remove(info.color);
-        document
-          .getElementById("base-timer-path-remaining")
+        time_path
           .classList.add(warning.color);
       }
     }
@@ -185,13 +181,11 @@
       return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
     }
 
-    function setCircleDasharray() {
+    function setCircleDasharray(time_path) {
       const circleDasharray = `${(
         calculateTimeFraction() * FULL_DASH_ARRAY
       ).toFixed(0)} 283`;
-      document
-        .getElementById("base-timer-path-remaining")
-        .setAttribute("stroke-dasharray", circleDasharray);
+      time_path.setAttribute("stroke-dasharray", circleDasharray);
     }
 
     // define the callAPI function that takes a first name and last name as parameters
@@ -221,12 +215,12 @@
     i = 0
     q = 'how is the wather'
 
-    var change_element = (q_element, t_element, answer) => {
+    var change_element = (q_element, t_element, time_label, time_path, answer) => {
       current_q = q_element.innerHTML
       q_element.innerHTML = questions[i]
       t_element.innerHTML = texts[i]
       i = (i + 1) % texts.length
-      startTimer()
+      startTimer(time_label, time_path)
       callAPI(current_q, answer)
     }
 
@@ -241,12 +235,45 @@
 <span id="text">Molly's Game is a 2017 American crime drama film written and directed by Aaron Sorkin (in his directorial debut), based on the memoir of the same name by Molly Bloom. It stars Jessica Chastain, Idris Elba, Kevin Costner, Michael Cera, Brian d'Arcy James, Chris O'Dowd, Bill Camp, Graham Greene, Claire Rankin, Joe Keery, and Jeremy Strong. The film follows Bloom (Chastain), who becomes the target of an FBI investigation of the underground poker empire she runs for Hollywood celebrities, athletes, business tycoons, and the Russian mob.</span>
 <br>
 <button type="button"
-        onclick="change_element(document.getElementById('quest'),document.getElementById('text'),1)">True
+        onclick="change_element(
+          document.getElementById('quest'),
+          document.getElementById('text'),
+          document.getElementById('base-timer-label'),
+          document.getElementById('base-timer-path-remaining')
+          ,1)">True
 </button>
 <button type="button"
-        onclick="change_element(document.getElementById('quest'),document.getElementById('text'),0)">False
+        onclick="change_element(document.getElementById('quest'),
+        document.getElementById('text'),
+        document.getElementById('base-timer-label'),
+          document.getElementById('base-timer-path-remaining'),
+        0)">False
 </button>
-<div id="app"></div>
+<div id="app">
+
+  <div class="base-timer">
+    <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <g class="base-timer__circle">
+        <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+        <path
+          id="base-timer-path-remaining"
+          stroke-dasharray="283"
+          class="base-timer__path-remaining ${remainingPathColor}"
+          d="
+          M 50, 50
+          m -45, 0
+          a 45,45 0 1,0 90,0
+          a 45,45 0 1,0 -90,0
+        "
+        ></path>
+      </g>
+    </svg>
+    <span id="base-timer-label" class="base-timer__label">${formatTime(
+      timeLeft
+    )}</span>
+  </div>
+
+</div>
 
 
 </body>
